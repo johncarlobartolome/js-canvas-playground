@@ -83,3 +83,10 @@ function render() {
 
   drawCircle(ball.x, ball.y, ball.radius, ball.color);
 }
+
+function game() {
+  render();
+}
+
+const framePerSecond = 60;
+setInterval(game, 1000 / framePerSecond);
