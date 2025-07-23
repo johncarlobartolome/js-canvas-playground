@@ -2,6 +2,8 @@ const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const paddleWidth = 10,
   paddleHeight = 100;
+let upPressed = false;
+let downPressed = false;
 
 const player = {
   x: 0,
@@ -103,6 +105,19 @@ function resetBall() {
 function update() {
   ball.x += ball.velocityX;
   ball.y += ball.velocityY;
+  const playerSpeed = 7;
+
+  if (upPressed) {
+    player.y -= playerSpeed;
+    if (player.y < 0) player.y = 0;
+  }
+
+  if (downPressed) {
+    player.y += playerSpeed;
+    if (player.y + player.height > canvas.height) {
+      player.y = canvas.height - player.height;
+    }
+  }
 
   if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
     ball.velocityY = -ball.velocityY;
@@ -137,6 +152,16 @@ function game() {
   update();
   render();
 }
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowUp") upPressed = true;
+  if (e.key === "ArrowDown") downPressed = true;
+});
+
+document.addEventListener("keyup", (e) => {
+  if (e.key === "ArrowUp") upPressed = false;
+  if (e.key === "ArrowDown") downPressed = false;
+});
 
 const framePerSecond = 60;
 setInterval(game, 1000 / framePerSecond);
