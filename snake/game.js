@@ -4,6 +4,14 @@ const ctx = canvas.getContext("2d");
 const box = 20;
 let snake = [{ x: 200, y: 200 }];
 let direction = "RIGHT";
+let food = spawnFood();
+
+function spawnFood() {
+  return {
+    x: Math.floor(Math.random() * (canvas.width / box)) * box,
+    y: Math.floor(Math.random() * (canvas.height / box)) * box,
+  };
+}
 
 function draw() {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
@@ -15,10 +23,19 @@ function draw() {
   else if (direction === "UP") head.y -= box;
   else if (direction === "DOWN") head.y += box;
 
-  snake[0] = head;
+  snake.unshift(head);
+
+  if (head.x === food.x && head.y === food.y) {
+    food = spawnFood();
+  } else {
+    snake.pop();
+  }
 
   ctx.fillStyle = "#0f0";
   ctx.fillRect(snake[0].x, snake[0].y, box, box);
+
+  ctx.fillStyle = "red";
+  ctx.fillRect(food.x, food.y, box, box);
 }
 
 document.addEventListener("keydown", (e) => {
