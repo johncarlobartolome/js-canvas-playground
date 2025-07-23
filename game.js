@@ -84,6 +84,22 @@ function render() {
   drawCircle(ball.x, ball.y, ball.radius, ball.color);
 }
 
+function collision(b, p) {
+  return (
+    b.x - b.radius < p.x + p.width &&
+    b.x + b.radius > p.x &&
+    b.y < p.y + p.height &&
+    b.y + b.radius > p.y
+  );
+}
+
+function resetBall() {
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height / 2;
+  ball.velocityX = -ball.velocityX;
+  ball.speed = 7;
+}
+
 function game() {
   render();
 }
