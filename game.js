@@ -134,6 +134,7 @@ function update() {
 }
 
 function game() {
+  update();
   render();
 }
 
