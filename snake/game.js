@@ -8,7 +8,22 @@ let nextDirection = "RIGHT";
 let food = spawnFood();
 let score = 0;
 let gameRunning = true;
-let canChangeDirection = true;
+
+let lastMoveTime = 0;
+const moveDelay = 100;
+
+document.addEventListener("keydown", (e) => {
+  if (!gameRunning) return;
+  if (e.key === "ArrowUp" && direction !== "DOWN") {
+    nextDirection = "UP";
+  } else if (e.key === "ArrowDown" && direction !== "UP") {
+    nextDirection = "DOWN";
+  } else if (e.key === "ArrowLeft" && direction !== "RIGHT") {
+    nextDirection = "LEFT";
+  } else if (e.key === "ArrowRight" && direction !== "LEFT") {
+    nextDirection = "RIGHT";
+  }
+});
 
 function spawnFood() {
   return {
@@ -21,18 +36,10 @@ function checkCollision(head, body) {
   return body.some((part) => part.x === head.x && part.y === head.y);
 }
 
-function draw() {
-  if (!gameRunning) return;
-
+function updateSnake() {
   direction = nextDirection;
-  canChangeDirection = true;
 
-  ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
-
-  ctx.fillStyle = "red";
-  ctx.fillRect(food.x, food.y, box, box);
-
-  let head = { ...snake[0] };
+  const head = { ...snake[0] };
 
   if (direction === "RIGHT") head.x += box;
   else if (direction === "LEFT") head.x -= box;
@@ -48,7 +55,6 @@ function draw() {
 
   if (hitWall || hitSelf) {
     gameRunning = false;
-    clearInterval(game);
     setTimeout(() => {
       alert("Game Over! Your Score: " + score);
     }, 100);
@@ -63,28 +69,29 @@ function draw() {
   } else {
     snake.pop();
   }
+}
 
+function drawGame() {
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
+
+  ctx.fillStyle = "red";
+  ctx.fillRect(food.x, food.y, box, box);
   ctx.fillStyle = "#0f0";
   snake.forEach((part) => {
     ctx.fillRect(part.x, part.y, box, box);
   });
 }
 
-document.addEventListener("keydown", (e) => {
-  if (!gameRunning || !canChangeDirection) return;
-  if (e.key === "ArrowUp" && direction !== "DOWN") {
-    nextDirection = "UP";
-    canChangeDirection = false;
-  } else if (e.key === "ArrowDown" && direction !== "UP") {
-    nextDirection = "DOWN";
-    canChangeDirection = false;
-  } else if (e.key === "ArrowLeft" && direction !== "RIGHT") {
-    nextDirection = "LEFT";
-    canChangeDirection = false;
-  } else if (e.key === "ArrowRight" && direction !== "LEFT") {
-    nextDirection = "RIGHT";
-    canChangeDirection = false;
-  }
-});
+function gameLoop(timestamp) {
+  if (!gameRunning) return;
 
-const game = setInterval(draw, 200);
+  if (timestamp - lastMoveTime > moveDelay) {
+    updateSnake();
+    lastMoveTime = timestamp;
+  }
+
+  drawGame();
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
