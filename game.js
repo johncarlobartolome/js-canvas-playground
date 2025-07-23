@@ -100,6 +100,39 @@ function resetBall() {
   ball.speed = 7;
 }
 
+function update() {
+  ball.x += ball.velocityX;
+  ball.y += ball.velocityY;
+
+  if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+    ball.velocityY = -ball.velocityY;
+  }
+
+  const paddle = ball.x < canvas.width / 2 ? player : computer;
+
+  if (collision(ball, paddle)) {
+    let collidePoint = ball.y - (paddle.y + paddle.height / 2);
+    collidePoint = collidePoint / (paddle.height / 2);
+
+    let angleRad = (Math.PI / 4) * collidePoint;
+    let direction = ball.x < canvas.width / 2 ? 1 : -1;
+
+    ball.velocityX = direction * ball.speed * Math.cos(angleRad);
+    ball.velocityY = ball.speed * Math.sin(angleRad);
+    ball.speed += 0.3;
+  }
+
+  if (ball.x - ball.radius < 0) {
+    computer.score++;
+    resetBall();
+  } else if (ball.x + ball.radius > canvas.width) {
+    player.score++;
+    resetBall();
+  }
+
+  computer.y += (ball.y - (computer.y + computer.height / 2)) * 0.1;
+}
+
 function game() {
   render();
 }
