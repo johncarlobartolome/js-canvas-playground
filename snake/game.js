@@ -4,9 +4,11 @@ const ctx = canvas.getContext("2d");
 const box = 20;
 let snake = [{ x: 200, y: 200 }];
 let direction = "RIGHT";
+let nextDirection = "RIGHT";
 let food = spawnFood();
 let score = 0;
 let gameRunning = true;
+let canChangeDirection = true;
 
 function spawnFood() {
   return {
@@ -21,6 +23,10 @@ function checkCollision(head, body) {
 
 function draw() {
   if (!gameRunning) return;
+
+  direction = nextDirection;
+  canChangeDirection = true;
+
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
 
   ctx.fillStyle = "red";
@@ -65,11 +71,20 @@ function draw() {
 }
 
 document.addEventListener("keydown", (e) => {
-  if (!gameRunning) return;
-  if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-  if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-  if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-  if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+  if (!gameRunning || !canChangeDirection) return;
+  if (e.key === "ArrowUp" && direction !== "DOWN") {
+    nextDirection = "UP";
+    canChangeDirection = false;
+  } else if (e.key === "ArrowDown" && direction !== "UP") {
+    nextDirection = "DOWN";
+    canChangeDirection = false;
+  } else if (e.key === "ArrowLeft" && direction !== "RIGHT") {
+    nextDirection = "LEFT";
+    canChangeDirection = false;
+  } else if (e.key === "ArrowRight" && direction !== "LEFT") {
+    nextDirection = "RIGHT";
+    canChangeDirection = false;
+  }
 });
 
 const game = setInterval(draw, 200);
