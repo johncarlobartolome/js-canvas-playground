@@ -57,3 +57,29 @@ function drawText(text, x, y, color) {
   ctx.font = "45px Arial";
   ctx.fillText(text, x, y);
 }
+
+function drawNet() {
+  for (let i = 0; i <= canvas.heigt; i += 15) {
+    drawRect(net.x, net.y + i, net.width, net.height, net.color);
+  }
+}
+
+function render() {
+  drawRect(0, 0, canvas.width, canvas.height, "black");
+
+  drawNet();
+
+  drawText(player.score, canvas.width / 4, 50, "white");
+  drawText(computer.score, (3 * canvas.width) / 4, 50, "white");
+
+  drawRect(player.x, player.y, player.width, player.height, player.color);
+  drawRect(
+    computer.x,
+    computer.y,
+    computer.width,
+    computer.height,
+    computer.color
+  );
+
+  drawCircle(ball.x, ball.y, ball.radius, ball.color);
+}
