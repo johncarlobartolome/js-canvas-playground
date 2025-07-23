@@ -146,6 +146,10 @@ function update() {
   }
 
   computer.y += (ball.y - (computer.y + computer.height / 2)) * 0.1;
+  if (computer.y < 0) computer.y = 0;
+  if (computer.y + computer.height > canvas.height) {
+    computer.y = canvas.height - computer.height;
+  }
 }
 
 function game() {
