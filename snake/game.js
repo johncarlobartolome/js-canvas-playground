@@ -6,6 +6,7 @@ let snake = [{ x: 200, y: 200 }];
 let direction = "RIGHT";
 let food = spawnFood();
 let score = 0;
+let gameRunning = true;
 
 function spawnFood() {
   return {
@@ -19,6 +20,7 @@ function checkCollision(head, body) {
 }
 
 function draw() {
+  if (!gameRunning) return;
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
 
   ctx.fillStyle = "red";
@@ -31,6 +33,22 @@ function draw() {
   else if (direction === "UP") head.y -= box;
   else if (direction === "DOWN") head.y += box;
 
+  const hitWall =
+    head.x < 0 ||
+    head.x >= canvas.width ||
+    head.y < 0 ||
+    head.y >= canvas.height;
+  const hitSelf = checkCollision(head, snake);
+
+  if (hitWall || hitSelf) {
+    gameRunning = false;
+    clearInterval(game);
+    setTimeout(() => {
+      alert("Game Over! Your Score: " + score);
+    }, 100);
+    return;
+  }
+
   snake.unshift(head);
 
   if (head.x === food.x && head.y === food.y) {
@@ -40,18 +58,6 @@ function draw() {
     snake.pop();
   }
 
-  if (
-    head.x < 0 ||
-    head.x >= canvas.width ||
-    head.y < 0 ||
-    head.y >= canvas.height ||
-    checkCollision(head, snake.slice(1))
-  ) {
-    clearInterval(game);
-    alert("Game Over! Refresh to restart.");
-    return;
-  }
-
   ctx.fillStyle = "#0f0";
   snake.forEach((part) => {
     ctx.fillRect(part.x, part.y, box, box);
@@ -59,10 +65,11 @@ function draw() {
 }
 
 document.addEventListener("keydown", (e) => {
+  if (!gameRunning) return;
   if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
   if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
   if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
   if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
 });
 
-setInterval(draw, 200);
+const game = setInterval(draw, 200);
