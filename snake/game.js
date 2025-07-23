@@ -13,6 +13,10 @@ function spawnFood() {
   };
 }
 
+function checkCollision(head, body) {
+  return body.some((part) => part.x === head.x && part.y === head.y);
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
 
@@ -29,6 +33,18 @@ function draw() {
     food = spawnFood();
   } else {
     snake.pop();
+  }
+
+  if (
+    head.x < 0 ||
+    head.x >= canvas.width ||
+    head.y < 0 ||
+    head.y >= canvas.height ||
+    checkCollision(head, snake.slice(1))
+  ) {
+    alert("Game Over! Refresh to restart.");
+    clearInterval(game);
+    return;
   }
 
   ctx.fillStyle = "#0f0";
