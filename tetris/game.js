@@ -46,6 +46,7 @@ function playerDrop() {
   if (collide(arena, player)) {
     player.pos.y--;
     merge(arena, player);
+    arenaSweep();
     player.pos.y = 0;
   }
 }
@@ -77,6 +78,21 @@ function playerMove(direction) {
   // If move is invalid (e.g. hits wall or block), revert it
   if (collide(arena, player)) {
     player.pos.x -= direction;
+  }
+}
+
+function arenaSweep() {
+  outer: for (let y = arena.length - 1; y >= 0; --y) {
+    for (let x = 0; x < arena[y].length; ++x) {
+      if (arena[y][x] === 0) {
+        continue outer; // not a full row
+      }
+    }
+
+    // Remove full row and add empty one at the top
+    const row = arena.splice(y, 1)[0].fill(0);
+    arena.unshift(row);
+    y++; // Check same row again
   }
 }
 
