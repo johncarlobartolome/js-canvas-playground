@@ -12,7 +12,7 @@ This project is designed to help me (and hopefully others) learn and practice co
 | Snake          | ✅ Done    | Classic snake game where you grow and avoid |
 | Breakout       | 🔜 Planned | Break bricks with a bouncing ball           |
 | Flappy Bird    | 🔜 Planned | Tap to fly and avoid pipes                  |
-| Tetris         | 🔜 Planned | Rotate and drop blocks to clear lines       |
+| Tetris         | ✅ Done    | Rotate and drop blocks to clear lines       |
 | Space Invaders | 🔜 Planned | Shoot aliens before they reach you          |
 
 > ✅ Done – Complete, 🛠️ WIP – In Progress, 🔜 Planned – Not yet started
