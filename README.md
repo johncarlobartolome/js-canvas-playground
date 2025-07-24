@@ -9,7 +9,7 @@ This project is designed to help me (and hopefully others) learn and practice co
 | Game           | Status     | Description                                 |
 | -------------- | ---------- | ------------------------------------------- |
 | Pong           | ✅ Done    | A two-player paddle game with bouncing ball |
-| Snake          | 🛠️ WIP     | Classic snake game where you grow and avoid |
+| Snake          | ✅ Done    | Classic snake game where you grow and avoid |
 | Breakout       | 🔜 Planned | Break bricks with a bouncing ball           |
 | Flappy Bird    | 🔜 Planned | Tap to fly and avoid pipes                  |
 | Tetris         | 🔜 Planned | Rotate and drop blocks to clear lines       |
