@@ -4,20 +4,70 @@ ctx.scale(30, 30);
 
 const player = {
   pos: { x: 3, y: 0 },
-  matrix: createPiece_T(),
+  matrix: createPiece("T"),
 };
 
 let dropCounter = 0;
 let dropInterval = 1000;
 let lastTime = 0;
 
-function createPiece_T() {
-  return [
-    [0, 1, 0],
-    [1, 1, 1],
-    [0, 0, 0],
-  ];
+function createPiece(type) {
+  switch (type) {
+    case "T":
+      return [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0],
+      ];
+    case "O":
+      return [
+        [2, 2],
+        [2, 2],
+      ];
+    case "L":
+      return [
+        [0, 0, 3],
+        [3, 3, 3],
+        [0, 0, 0],
+      ];
+    case "J":
+      return [
+        [4, 0, 0],
+        [4, 4, 4],
+        [0, 0, 0],
+      ];
+    case "I":
+      return [
+        [0, 5, 0, 0],
+        [0, 5, 0, 0],
+        [0, 5, 0, 0],
+        [0, 5, 0, 0],
+      ];
+    case "S":
+      return [
+        [0, 6, 6],
+        [6, 6, 0],
+        [0, 0, 0],
+      ];
+    case "Z":
+      return [
+        [7, 7, 0],
+        [0, 7, 7],
+        [0, 0, 0],
+      ];
+  }
 }
+
+const colors = [
+  null, // 0 = empty, no color
+  "#8000FF", // 1 = T (purple)
+  "#FFD500", // 2 = O (yellow)
+  "#FF9900", // 3 = L (orange)
+  "#0077FF", // 4 = J (blue)
+  "#00FFFF", // 5 = I (cyan)
+  "#00FF00", // 6 = S (green)
+  "#FF0000", // 7 = Z (red)
+];
 
 function createMatrix(w, h) {
   const matrix = [];
@@ -41,13 +91,56 @@ function collide(arena, player) {
   return false;
 }
 
+function playerReset() {
+  const pieces = "TJLOSZI";
+  player.matrix = createPiece(
+    pieces[Math.floor(Math.random() * pieces.length)]
+  );
+  player.pos.y = 0;
+  player.pos.x =
+    ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
+
+  if (collide(arena, player)) {
+    arena.forEach((row) => row.fill(0)); // Game over
+    alert("Game Over!");
+  }
+}
+
 function playerDrop() {
   player.pos.y++;
   if (collide(arena, player)) {
     player.pos.y--;
     merge(arena, player);
     arenaSweep();
-    player.pos.y = 0;
+    playerReset();
+  }
+}
+
+function rotate(matrix, dir) {
+  for (let y = 0; y < matrix.length; ++y) {
+    for (let x = 0; x < y; ++x) {
+      [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+    }
+  }
+  if (dir > 0) {
+    matrix.forEach((row) => row.reverse());
+  } else {
+    matrix.reverse();
+  }
+}
+
+function playerRotate(dir) {
+  const pos = player.pos.x;
+  let offset = 1;
+  rotate(player.matrix, dir);
+  while (collide(arena, player)) {
+    player.pos.x += offset;
+    offset = -(offset + (offset > 0 ? 1 : -1));
+    if (offset > player.matrix[0].length) {
+      rotate(player.matrix, -dir);
+      player.pos.x = pos;
+      return;
+    }
   }
 }
 
@@ -65,7 +158,7 @@ function drawMatrix(matrix, offset) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        ctx.fillStyle = "purple";
+        ctx.fillStyle = colors[value];
         ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
       }
     });
@@ -103,6 +196,10 @@ document.addEventListener("keydown", (event) => {
     playerMove(1);
   } else if (event.key === "ArrowDown") {
     playerDrop(); // Drop one row instantly
+  } else if (event.key === "q") {
+    playerRotate(-1);
+  } else if (event.key === "w") {
+    playerRotate(1);
   }
 });
 
