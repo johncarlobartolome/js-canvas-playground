@@ -7,6 +7,10 @@ const player = {
   matrix: createPiece_T(),
 };
 
+let dropCounter = 0;
+let dropInterval = 1000;
+let lastTime = 0;
+
 function createPiece_T() {
   return [
     [0, 1, 0],
@@ -33,4 +37,18 @@ function draw() {
   drawMatrix(player.matrix, player.pos);
 }
 
-draw();
+function update(time = 0) {
+  const deltaTime = time - lastTime;
+  lastTime = time;
+
+  dropCounter += deltaTime;
+  if (dropCounter > dropInterval) {
+    player.pos.y++;
+    dropCounter = 0;
+  }
+
+  draw();
+  requestAnimationFrame(update);
+}
+
+update();
