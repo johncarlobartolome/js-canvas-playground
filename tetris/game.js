@@ -19,17 +19,6 @@ function createPiece_T() {
   ];
 }
 
-function drawMatrix(matrix, offset) {
-  matrix.forEach((row, y) => {
-    row.forEach((value, x) => {
-      if (value !== 0) {
-        ctx.fillStyle = "purple";
-        ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
-      }
-    });
-  });
-}
-
 function createMatrix(w, h) {
   const matrix = [];
   while (h--) {
@@ -71,10 +60,41 @@ function merge(arena, player) {
   });
 }
 
+function drawMatrix(matrix, offset) {
+  matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value !== 0) {
+        ctx.fillStyle = "purple";
+        ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
+      }
+    });
+  });
+}
+
+function playerMove(direction) {
+  player.pos.x += direction;
+
+  // If move is invalid (e.g. hits wall or block), revert it
+  if (collide(arena, player)) {
+    player.pos.x -= direction;
+  }
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") {
+    playerMove(-1);
+  } else if (event.key === "ArrowRight") {
+    playerMove(1);
+  } else if (event.key === "ArrowDown") {
+    playerDrop(); // Drop one row instantly
+  }
+});
+
 function draw() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  drawMatrix(arena, { x: 0, y: 0 });
   drawMatrix(player.matrix, player.pos);
 }
 
