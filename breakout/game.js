@@ -8,9 +8,16 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 
 const ballRadius = 10;
 let ballX = canvas.width / 2;
-let ballY = canvas.height - 30;
-let ballDX = 4;
-let ballDY = -4;
+let ballY = canvas.height - 60; // higher above the paddle
+
+// Random angle between -60° and +60° (in radians)
+const angle = (Math.random() * 120 - 60) * (Math.PI / 180);
+
+// Constant speed
+const speed = 5;
+
+let ballDX = speed * Math.sin(angle);
+let ballDY = -Math.abs(speed * Math.cos(angle)); // upward direction
 
 let rightPressed = false;
 let leftPressed = false;
