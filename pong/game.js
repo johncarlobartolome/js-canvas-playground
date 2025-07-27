@@ -8,8 +8,10 @@ const paddleWidth = 10,
 let upPressed = false;
 let downPressed = false;
 
+const paddleOffset = 20;
+
 const player = {
-  x: 0,
+  x: paddleOffset,
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
@@ -18,7 +20,7 @@ const player = {
 };
 
 const computer = {
-  x: canvas.width - paddleWidth,
+  x: canvas.width - paddleWidth - paddleOffset,
   y: canvas.height / 2 - paddleHeight / 2,
   width: paddleWidth,
   height: paddleHeight,
