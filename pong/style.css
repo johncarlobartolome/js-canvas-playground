@@ -12,4 +12,6 @@ canvas {
   background-color: black;
   border-radius: 50px;
   border: 8px solid white;
+  border-left: 8px dashed white; /* 👈 Dashed left side */
+  border-right: 8px dashed white;
 }
