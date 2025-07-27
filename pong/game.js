@@ -1,3 +1,6 @@
+const sound_hit = new Audio("sounds/hit.mp3");
+const sound_wall = new Audio("sounds/wall.mp3");
+const sound_score = new Audio("sounds/score.mp3");
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const paddleWidth = 10,
@@ -121,11 +124,13 @@ function update() {
 
   if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
     ball.velocityY = -ball.velocityY;
+    sound_wall.play();
   }
 
   const paddle = ball.x < canvas.width / 2 ? player : computer;
 
   if (collision(ball, paddle)) {
+    sound_hit.play();
     let collidePoint = ball.y - (paddle.y + paddle.height / 2);
     collidePoint = collidePoint / (paddle.height / 2);
 
@@ -138,9 +143,11 @@ function update() {
   }
 
   if (ball.x - ball.radius < 0) {
+    sound_score.play();
     computer.score++;
     resetBall();
   } else if (ball.x + ball.radius > canvas.width) {
+    sound_score.play();
     player.score++;
     resetBall();
   }
