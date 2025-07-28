@@ -12,6 +12,10 @@ const player = {
   speed: 5,
   bullets: [],
 };
+const invaders = [];
+const rows = 4;
+const cols = 8;
+const spacing = 50;
 let canShoot = true;
 
 // Step 2: Draw the player
@@ -36,6 +40,29 @@ function drawBullets() {
   });
 }
 
+function createInvaders() {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      invaders.push({
+        x: 60 + col * spacing,
+        y: 40 + row * spacing,
+        width: 30,
+        height: 20,
+        color: "red",
+        alive: true,
+      });
+    }
+  }
+}
+
+function drawInvaders() {
+  invaders.forEach((inv) => {
+    if (!inv.alive) return;
+    ctx.fillStyle = inv.color;
+    ctx.fillRect(inv.x, inv.y, inv.width, inv.height);
+  });
+}
+
 // Step 3: Clear and draw the canvas each frame
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -53,7 +80,47 @@ function update() {
 
   drawPlayer();
   drawBullets();
+  drawInvaders();
+  moveInvaders();
+  detectCollisions();
   requestAnimationFrame(update);
+}
+
+let invaderDirection = 1;
+
+function moveInvaders() {
+  let shouldReverse = false;
+
+  invaders.forEach((inv) => {
+    if (!inv.alive) return;
+    inv.x += invaderDirection * 2;
+    if (inv.x + inv.width >= canvas.width || inv.x <= 0) {
+      shouldReverse = true;
+    }
+  });
+
+  if (shouldReverse) {
+    invaderDirection *= -1;
+    invaders.forEach((inv) => (inv.y += 20));
+  }
+}
+
+function detectCollisions() {
+  player.bullets.forEach((bullet, bi) => {
+    invaders.forEach((inv) => {
+      if (!inv.alive) return;
+
+      if (
+        bullet.x < inv.x + inv.width &&
+        bullet.x + bullet.width > inv.x &&
+        bullet.y < inv.y + inv.height &&
+        bullet.y + bullet.height > inv.y
+      ) {
+        inv.alive = false;
+        player.bullets.splice(bi, 1);
+      }
+    });
+  });
 }
 
 // Step 4: Handle keyboard inpu
@@ -79,3 +146,4 @@ document.addEventListener("keyup", (e) => {
 
 // Start the game loop
 update();
+createInvaders();
