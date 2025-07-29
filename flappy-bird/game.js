@@ -10,7 +10,21 @@ const bird = {
   color: "yellow",
   velocity: 0,
   gravity: 0.5,
+  jumpStrength: -8,
 };
+
+// Handle flap
+function flap() {
+  bird.velocity = bird.jumpStrength;
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") {
+    flap();
+  }
+});
+
+canvas.addEventListener("click", flap);
 
 // Game loop
 function draw() {
