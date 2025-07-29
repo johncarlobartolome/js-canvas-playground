@@ -1,5 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const restartBtn = document.getElementById("restartBtn");
+restartBtn.addEventListener("click", restartGame);
 
 const pipeWidth = 50;
 const pipeGap = 120;
@@ -66,7 +68,7 @@ function draw() {
   if (bird.y + bird.height >= canvas.height || bird.y <= 0) {
     bird.y = Math.min(bird.y, canvas.height - bird.height);
     gameOver = true;
-    alert("Game Over!");
+    restartBtn.style.display = "block";
     return;
   }
 
@@ -94,7 +96,7 @@ function draw() {
       (bird.y < pipe.topHeight || bird.y + bird.height > pipe.bottomY)
     ) {
       gameOver = true;
-      alert("Game Over!");
+      restartBtn.style.display = "block";
       return;
     }
 
@@ -119,6 +121,17 @@ function draw() {
   ctx.fillText(`Score: ${score}`, 10, 50);
 
   requestAnimationFrame(draw);
+}
+
+function restartGame() {
+  bird.y = 150;
+  bird.velocity = 0;
+  pipes.length = 0;
+  frameCount = 0;
+  score = 0;
+  gameOver = false;
+  restartBtn.style.display = "none";
+  draw();
 }
 
 draw();

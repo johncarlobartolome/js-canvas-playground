@@ -11,3 +11,16 @@ canvas {
   border: 2px solid #000;
   background-color: #fff;
 }
+
+#restartBtn {
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  padding: 12px 24px;
+  font-size: 18px;
+  background-color: #ffce00;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
