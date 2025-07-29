@@ -6,14 +6,14 @@ This project is designed to help me (and hopefully others) learn and practice co
 
 ## Games Included
 
-| Game           | Status     | Description                                 |
-| -------------- | ---------- | ------------------------------------------- |
-| Pong           | ✅ Done    | A two-player paddle game with bouncing ball |
-| Snake          | ✅ Done    | Classic snake game where you grow and avoid |
-| Breakout       | 🔜 Planned | Break bricks with a bouncing ball           |
-| Flappy Bird    | 🔜 Planned | Tap to fly and avoid pipes                  |
-| Tetris         | ✅ Done    | Rotate and drop blocks to clear lines       |
-| Space Invaders | 🔜 Planned | Shoot aliens before they reach you          |
+| Game           | Status  | Description                                 |
+| -------------- | ------- | ------------------------------------------- |
+| Pong           | ✅ Done | A two-player paddle game with bouncing ball |
+| Snake          | ✅ Done | Classic snake game where you grow and avoid |
+| Breakout       | ✅ Done | Break bricks with a bouncing ball           |
+| Flappy Bird    | ✅ Done | Tap to fly and avoid pipes                  |
+| Tetris         | ✅ Done | Rotate and drop blocks to clear lines       |
+| Space Invaders | ✅ Done | Shoot aliens before they reach you          |
 
 > ✅ Done – Complete, 🛠️ WIP – In Progress, 🔜 Planned – Not yet started
 
