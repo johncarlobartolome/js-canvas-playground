@@ -1,6 +1,12 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+const pipeWidth = 50;
+const pipeGap = 120;
+const pipeSpeed = 2;
+const pipes = [];
+let frameCount = 0;
+
 // Bird properties
 const bird = {
   x: 50,
@@ -30,6 +36,19 @@ document.addEventListener("keydown", (e) => {
 
 canvas.addEventListener("click", flap);
 
+// Generate a new pipe
+function createPipe() {
+  const minHeight = 50;
+  const maxHeight = canvas.height - pipeGap - minHeight;
+  const topHeight = Math.floor(Math.random() * maxHeight) + minHeight;
+
+  pipes.push({
+    x: canvas.width,
+    topHeight,
+    bottomY: topHeight + pipeGap,
+  });
+}
+
 // Game loop
 function draw() {
   if (gameOver) return;
@@ -47,6 +66,40 @@ function draw() {
     gameOver = true;
     alert("Game Over!");
     return;
+  }
+
+  // Update and draw pipes
+  frameCount++;
+  if (frameCount % 90 === 0) {
+    createPipe();
+  }
+
+  for (let i = pipes.length - 1; i >= 0; i--) {
+    const pipe = pipes[i];
+    pipe.x -= pipeSpeed;
+
+    // Draw top pipe
+    ctx.fillStyle = "green";
+    ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+
+    // Draw bottom pipe
+    ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+
+    // Collision detection
+    if (
+      bird.x < pipe.x + pipeWidth &&
+      bird.x + bird.width > pipe.x &&
+      (bird.y < pipe.topHeight || bird.y + bird.height > pipe.bottomY)
+    ) {
+      gameOver = true;
+      alert("Game Over!");
+      return;
+    }
+
+    // Remove off-screen pipes
+    if (pipe.x + pipeWidth < 0) {
+      pipes.splice(i, 1);
+    }
   }
 
   // Draw bird
