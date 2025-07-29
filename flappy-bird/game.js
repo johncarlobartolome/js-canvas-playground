@@ -7,6 +7,8 @@ const pipeSpeed = 2;
 const pipes = [];
 let frameCount = 0;
 
+let score = 0;
+
 // Bird properties
 const bird = {
   x: 50,
@@ -96,6 +98,11 @@ function draw() {
       return;
     }
 
+    if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
+      pipe.passed = true;
+      score++;
+    }
+
     // Remove off-screen pipes
     if (pipe.x + pipeWidth < 0) {
       pipes.splice(i, 1);
@@ -105,6 +112,11 @@ function draw() {
   // Draw bird
   ctx.fillStyle = bird.color;
   ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+
+  // Draw score
+  ctx.fillStyle = "white";
+  ctx.font = "32px Arial";
+  ctx.fillText(`Score: ${score}`, 10, 50);
 
   requestAnimationFrame(draw);
 }
